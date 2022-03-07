@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>RGB565への相互変換</title>
+        <script type="text/javascript">
+        function toHex4(v) {
+            return ('0000' + v.toString(16).toUpperCase()).substr(-4);
+        }
+        function toHex6(v) {
+            return ('000000' + v.toString(16).toUpperCase()).substr(-6);
+        }
+        function colc() {
+            document.getElementById("dst").style.background = "#ffff00";
+        }
+        function toRGB565(){
+            var v = parseInt(document.colorRGB.RGB888.value);
+            document.getElementById("dst").style.background = '#' + toHex6(v);
+            v = (v >> 8 & 0xf800) | (v >> 5 & 0x7e0) | (v >> 3 & 0x1f);
+            document.colorRGB.RGB565.value = '0x' + toHex4(v);
+        }
+        function toRGB888(){
+            var v = parseInt(document.colorRGB.RGB565.value);
+            v = (v << 8 & 0xf80000) | (v << 3 & 0x70000) | (v << 5 & 0xfc00) | (v >> 1 & 0x300) | (v << 3 & 0xf8) | (v >> 2 & 0x7);
+            document.getElementById("dst").style.background = '#' + toHex6(v);
+            document.colorRGB.RGB888.value = '0x' + toHex6(v);
+        }
+        </script>
+        <style>
+        span#dst {
+            background-color: black;
+            display: inline-block;
+            width: 200px;
+            height: 100px;
+        }
+        </style>
+    </head>
+    
+    <body>
+        <form name = "colorRGB">
+            RGB888：<input type = "text" name = "RGB888" size = 10 value="0x00FF00">
+            <input type = "button" onclick = "toRGB565()" value = "RGB565へ変換"><br>
+            RGB565：<input type = "text" name = "RGB565" size = 10>
+            <input type = "button" onclick = "toRGB888()" value = "RGB888へ変換"><br>
+            <span id="dst"></span>
+        </form>
+    </body>
+</html>
